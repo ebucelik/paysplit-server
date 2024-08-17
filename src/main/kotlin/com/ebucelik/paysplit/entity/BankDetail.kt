@@ -1,5 +1,6 @@
 package com.ebucelik.paysplit.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
 @Entity
@@ -20,6 +21,7 @@ class BankDetail {
     @Column
     var lastname: String = ""
 
+    @JsonIgnore
     @OneToOne(mappedBy = "bankdetail")
     var account: Account? = null
 }

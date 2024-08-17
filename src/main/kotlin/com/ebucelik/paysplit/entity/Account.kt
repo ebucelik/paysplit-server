@@ -1,6 +1,7 @@
 package com.ebucelik.paysplit.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import jakarta.annotation.Nonnull
 import jakarta.persistence.*
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
@@ -10,10 +11,10 @@ class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     var username: String = ""
 
-    @Column
+    @Column(nullable = false)
     var password: String = ""
         @JsonIgnore
         get() = field
@@ -22,10 +23,10 @@ class Account {
             field = BCryptPasswordEncoder().encode(value)
         }
 
-    @Column
+    @Column(nullable = false)
     var firstname: String = ""
 
-    @Column
+    @Column(nullable = false)
     var lastname: String = ""
 
     @Column

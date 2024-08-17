@@ -1,6 +1,6 @@
 package com.ebucelik.paysplit.controller
 
-import com.ebucelik.paysplit.dto.PaymentIntentResponse
+import com.ebucelik.paysplit.dto.PaymentIntentDto
 import com.stripe.Stripe
 import com.stripe.exception.CardException
 import com.stripe.exception.InvalidRequestException
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("api/v1/payment")
 class PaymentController() {
     @PostMapping("create-payment-intent")
-    fun createPaymentIntent(): ResponseEntity<PaymentIntentResponse> {
+    fun createPaymentIntent(): ResponseEntity<PaymentIntentDto> {
         Stripe.apiKey = System.getenv("STRIPE_TEST_KEY")
 
         val publishableKey = System.getenv("PUBLISHABLE_TEST_KEY")
@@ -32,11 +32,11 @@ class PaymentController() {
         try {
             val paymentIntent = PaymentIntent.create(paymentIntentCreateParams)
 
-            val paymentIntentResponse = PaymentIntentResponse(
+            val paymentIntentDto = PaymentIntentDto(
                 paymentIntent.clientSecret,
                 publishableKey
             )
-            return ResponseEntity.ok(paymentIntentResponse)
+            return ResponseEntity.ok(paymentIntentDto)
         } catch (e: StripeException) {
             println("A stripe exception occurred.")
         } catch (e: CardException) {

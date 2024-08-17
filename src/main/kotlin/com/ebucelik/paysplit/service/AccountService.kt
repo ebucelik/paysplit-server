@@ -3,6 +3,8 @@ package com.ebucelik.paysplit.service
 import com.ebucelik.paysplit.entity.Account
 
 interface AccountService {
+    fun login(username: String, password: String): Account?
+    fun register(account: Account): Account
     fun findAccountsByUsernameOrFirstnameOrLastname(searchTerm: String): List<Account>
 
     fun deleteAccountById(id: Long)
