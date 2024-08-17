@@ -5,13 +5,16 @@ import com.ebucelik.paysplit.exception.UsernameOrPasswordWrongException
 import com.ebucelik.paysplit.repository.AccountRepository
 import com.ebucelik.paysplit.service.AccountService
 import com.ebucelik.paysplit.service.BankDetailService
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 
 @Service
-class AccountServiceImplementation(
+class AccountServiceImpl(
     private val accountRepository: AccountRepository,
     private val bankDetailService: BankDetailService
-) : AccountService {
+) : AccountService, UserDetailsService {
 
     override fun login(username: String, password: String): Account? {
         val account = accountRepository.findAccountByUsername(username)
@@ -51,6 +54,10 @@ class AccountServiceImplementation(
         return accountRepository.save(account)
     }
 
+    override fun findAccountByUsername(username: String): Account? {
+        return accountRepository.findAccountByUsername(username)
+    }
+
     override fun findAccountsByUsernameOrFirstnameOrLastname(searchTerm: String): List<Account> {
         return accountRepository.findAccountsByUsernameOrFirstnameOrLastname(
             searchTerm,
@@ -61,5 +68,23 @@ class AccountServiceImplementation(
 
     override fun deleteAccountById(id: Long) {
         return accountRepository.deleteAccountById(id)
+    }
+
+    override fun loadUserByUsername(username: String): UserDetails {
+        val userDetails = accountRepository.findAccountByUsername(username)?.let { mapToUserDetails(it) }
+
+        if (userDetails != null) {
+            return userDetails
+        }
+
+        throw UsernameOrPasswordWrongException("Username or password invalid.")
+    }
+
+    private fun mapToUserDetails(account: Account): UserDetails {
+        return User
+            .builder()
+            .username(account.username)
+            .password(account.password)
+            .build()
     }
 }

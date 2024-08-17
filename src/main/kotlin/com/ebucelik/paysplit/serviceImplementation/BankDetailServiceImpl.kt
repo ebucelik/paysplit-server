@@ -6,7 +6,7 @@ import com.ebucelik.paysplit.service.BankDetailService
 import org.springframework.stereotype.Service
 
 @Service
-class BankDetailServiceImplementation(private val bankDetailRepository: BankDetailRepository) : BankDetailService {
+class BankDetailServiceImpl(private val bankDetailRepository: BankDetailRepository) : BankDetailService {
     override fun findByIban(iban: String): BankDetail? {
         return bankDetailRepository.findByIban(iban)
     }

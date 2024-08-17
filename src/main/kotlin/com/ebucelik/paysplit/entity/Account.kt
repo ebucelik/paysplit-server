@@ -1,7 +1,6 @@
 package com.ebucelik.paysplit.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import jakarta.annotation.Nonnull
 import jakarta.persistence.*
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
