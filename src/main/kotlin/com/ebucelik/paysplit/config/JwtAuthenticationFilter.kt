@@ -3,6 +3,8 @@ package com.ebucelik.paysplit.config
 import com.ebucelik.paysplit.entity.Account
 import com.ebucelik.paysplit.service.AccountService
 import com.ebucelik.paysplit.serviceImplementation.JwtServiceImpl
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -23,24 +25,30 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val authorizationHeader = request.getHeader("Authorization")
+        try {
+            val authorizationHeader = request.getHeader("Authorization")
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            val jwtToken = authorizationHeader.substringAfter("Bearer ")
-            val username = jwtService.extractUsername(jwtToken)
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                val jwtToken = authorizationHeader.substringAfter("Bearer ")
+                val username = jwtService.extractUsername(jwtToken)
 
-            if (username != null && SecurityContextHolder.getContext().authentication == null) {
-                val account = accountService.findAccountByUsername(username)
+                if (username != null && SecurityContextHolder.getContext().authentication == null) {
+                    val account = accountService.findAccountByUsername(username)
 
-                if (account != null && jwtService.isValid(jwtToken, account)) {
-                    updateSecurityContext(account, request)
+                    if (account != null && jwtService.isValid(jwtToken, account)) {
+                        updateSecurityContext(account, request)
+                    }
+
+                    filterChain.doFilter(request, response)
                 }
-
+            } else {
                 filterChain.doFilter(request, response)
+                return
             }
-        } else {
+        } catch (e: ExpiredJwtException) {
             filterChain.doFilter(request, response)
-            return
+
+            println(e.message)
         }
     }
 

@@ -1,12 +1,9 @@
 package com.ebucelik.paysplit.controller
 
-import com.ebucelik.paysplit.dto.ErrorMessageDto
+import com.ebucelik.paysplit.dto.MessageResponseDto
 import com.ebucelik.paysplit.dto.RegisterDto
-import com.ebucelik.paysplit.entity.Account
-import com.ebucelik.paysplit.exception.UsernameOrPasswordWrongException
 import com.ebucelik.paysplit.service.AccountService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
+import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,7 +25,7 @@ class AccountController(private val accountService: AccountService) {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(
                     e.message?.let { message ->
-                        ErrorMessageDto(message)
+                        MessageResponseDto(message)
                     }
                 )
         }
@@ -36,6 +33,6 @@ class AccountController(private val accountService: AccountService) {
 
     @GetMapping("/test")
     fun test(): ResponseEntity<out Any> {
-        return ResponseEntity.ok(ErrorMessageDto("Geht"))
+        return ResponseEntity.ok(MessageResponseDto("Geht"))
     }
 }

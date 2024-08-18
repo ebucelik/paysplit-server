@@ -3,6 +3,7 @@ package com.ebucelik.paysplit.serviceImplementation
 import com.ebucelik.paysplit.config.JwtProperties
 import com.ebucelik.paysplit.entity.Account
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys

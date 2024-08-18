@@ -60,6 +60,6 @@ class AuthenticationServiceImpl(
         }
     }
 
-    private fun getAccessTokenExpiration(): Date = Date(System.currentTimeMillis() + (jwtProperties.accessTokenExpiration * 24 * 7))
+    private fun getAccessTokenExpiration(): Date = Date(System.currentTimeMillis() + (jwtProperties.accessTokenExpiration * 24))
     private fun getRefreshTokenExpiration(): Date = Date(System.currentTimeMillis() + (jwtProperties.refreshTokenExpiration * 30))
 }
