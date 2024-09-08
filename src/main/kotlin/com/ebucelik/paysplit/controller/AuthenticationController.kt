@@ -2,7 +2,9 @@ package com.ebucelik.paysplit.controller
 
 import com.ebucelik.paysplit.dto.*
 import com.ebucelik.paysplit.exception.UsernameOrPasswordWrongException
+import com.ebucelik.paysplit.service.AccountService
 import com.ebucelik.paysplit.serviceImplementation.AuthenticationServiceImpl
+import com.ebucelik.paysplit.serviceImplementation.JwtServiceImpl
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/auth")
 class AuthenticationController(
-    private val authenticationServiceImpl: AuthenticationServiceImpl
+    private val authenticationServiceImpl: AuthenticationServiceImpl,
+    private val jwtService: JwtServiceImpl,
+    private val accountService: AccountService
 ) {
 
     @PostMapping("/login")
@@ -67,7 +71,16 @@ class AuthenticationController(
 
                 response.addCookie(cookie)
 
-                return ResponseEntity.ok(AuthenticationResponseDto(accessToken, refreshTokenRequestDto.token))
+                val username = jwtService.extractUsername(accessToken)
+                val account = username?.let { accountService.findAccountByUsername(it) }
+
+                if (account != null) {
+                    return ResponseEntity.ok(
+                        AuthenticationResponseDto(accessToken, refreshTokenRequestDto.token, account)
+                    )
+                } else {
+                    throw UsernameOrPasswordWrongException("Please log in again.")
+                }
             } else {
                 throw UsernameOrPasswordWrongException("Please log in again.")
             }

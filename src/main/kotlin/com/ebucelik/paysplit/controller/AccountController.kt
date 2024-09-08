@@ -30,9 +30,4 @@ class AccountController(private val accountService: AccountService) {
                 )
         }
     }
-
-    @GetMapping("/test")
-    fun test(): ResponseEntity<out Any> {
-        return ResponseEntity.ok(MessageResponseDto("Geht"))
-    }
 }

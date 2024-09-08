@@ -39,7 +39,8 @@ class AuthenticationServiceImpl(
 
             return AuthenticationResponseDto(
                 accessToken,
-                refreshToken
+                refreshToken,
+                account
             )
         }
 
