@@ -7,6 +7,7 @@ interface AccountService {
     fun register(account: Account): Account
     fun findAccountByUsername(username: String): Account?
     fun findAccountsByUsernameOrFirstnameOrLastname(searchTerm: String): List<Account>
+    fun findAccountsByIds(ids: List<Long>): List<Account>
 
     fun deleteAccountById(id: Long)
 }

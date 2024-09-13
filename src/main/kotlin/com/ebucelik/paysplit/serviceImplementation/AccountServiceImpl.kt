@@ -59,11 +59,15 @@ class AccountServiceImpl(
     }
 
     override fun findAccountsByUsernameOrFirstnameOrLastname(searchTerm: String): List<Account> {
-        return accountRepository.findAccountsByUsernameOrFirstnameOrLastname(
+        return accountRepository.findAccountsByUsernameContainingOrFirstnameContainingOrLastnameContaining(
             searchTerm,
             searchTerm,
             searchTerm
         )
+    }
+
+    override fun findAccountsByIds(ids: List<Long>): List<Account> {
+        return accountRepository.findAccountsBy(ids)
     }
 
     override fun deleteAccountById(id: Long) {
