@@ -37,9 +37,9 @@ class AccountController(
     }
 
     @GetMapping("/search")
-    fun search(@RequestParam username: String, @RequestParam term: String): ResponseEntity<out Any> {
+    fun search(@RequestParam id: Long, @RequestParam term: String): ResponseEntity<out Any> {
         return try {
-            val accounts = accountService.findAccountsByUsernameOrFirstnameOrLastname(term).filter { it.username != username }
+            val accounts = accountService.findAccountsByUsernameOrFirstnameOrLastname(term).filter { it.id != id }
 
             return ResponseEntity.ok(accounts)
         } catch (e: Exception) {
