@@ -52,4 +52,19 @@ class AddedAccountServiceImpl(
 
         return accountService.findAccountsByIds(addedAccountIds)
     }
+
+    override fun searchAddedAccounts(id: Long, term: String): List<Account> {
+        val addedAccountIds = addedAccountRepository.findAddedAccountsByFirstIdOrSecondId(id, id)
+            .map {
+                if (it.firstId == id) {
+                    it.secondId
+                } else {
+                    it.firstId
+                }
+            }.toList()
+
+        return accountService.findAccountsByIds(addedAccountIds).filter {
+            it.username.contains(term) || it.firstname.contains(term) || it.lastname.contains(term)
+        }.toList()
+    }
 }

@@ -7,4 +7,5 @@ interface AddedAccountService {
     fun addAccount(firstId: Long, secondId: Long): MessageResponseDto
     fun removeAccount(firstId: Long, secondId: Long): MessageResponseDto
     fun getAddedAccounts(id: Long): List<Account>
+    fun searchAddedAccounts(id: Long, term: String): List<Account>
 }

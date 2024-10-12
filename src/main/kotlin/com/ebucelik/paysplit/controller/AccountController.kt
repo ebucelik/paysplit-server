@@ -97,4 +97,19 @@ class AccountController(
                 )
         }
     }
+
+    @GetMapping("/searchAddedAccounts")
+    fun searchedAccounts(@RequestParam id: Long, @RequestParam term: String): ResponseEntity<out Any> {
+        return try {
+            return ResponseEntity.ok(addedAccountService.searchAddedAccounts(id, term))
+        } catch (e: Exception) {
+            ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                    e.message?.let { message ->
+                        MessageResponseDto(message)
+                    }
+                )
+        }
+    }
 }
