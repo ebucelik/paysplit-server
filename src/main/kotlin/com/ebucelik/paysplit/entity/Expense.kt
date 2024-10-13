@@ -3,7 +3,6 @@ package com.ebucelik.paysplit.entity
 import jakarta.persistence.*
 
 @Entity
-@Table(uniqueConstraints = [UniqueConstraint(columnNames = ["creatorId", "expenseDescription", "timestamp"])])
 class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

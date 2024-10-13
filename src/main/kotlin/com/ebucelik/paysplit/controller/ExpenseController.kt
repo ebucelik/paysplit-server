@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController
 class ExpenseController(private val expenseService: ExpenseService) {
 
     @PostMapping("/add")
-    fun addExpense(@RequestBody expense: Expense): ResponseEntity<Any> {
+    fun addExpense(@RequestBody expenses: List<Expense>): ResponseEntity<Any> {
         return try {
-            ResponseEntity.ok(expenseService.addExpense(expense))
+            val expensesResponse = expenses.map { expenseService.addExpense(it) }.toList()
+
+            ResponseEntity.ok(expensesResponse)
         } catch (e: Exception) {
             ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
