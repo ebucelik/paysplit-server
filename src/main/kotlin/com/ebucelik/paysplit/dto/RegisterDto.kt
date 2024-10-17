@@ -1,15 +1,13 @@
 package com.ebucelik.paysplit.dto
 
 import com.ebucelik.paysplit.entity.Account
-import com.ebucelik.paysplit.entity.BankDetail
 
 class RegisterDto(
     val username: String,
     val password: String,
     val firstname: String,
     val lastname: String,
-    val picturelink: String = "",
-    val bankdetail: BankDetail? = null
+    val picturelink: String = ""
 ) {
     fun toAccount(): Account {
         val account = Account()
@@ -19,7 +17,6 @@ class RegisterDto(
         account.firstname = this.firstname
         account.lastname = this.lastname
         account.picturelink = this.picturelink
-        account.bankdetail = this.bankdetail
 
         return account
     }

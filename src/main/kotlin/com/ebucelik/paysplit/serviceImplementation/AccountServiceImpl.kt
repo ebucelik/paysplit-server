@@ -4,7 +4,6 @@ import com.ebucelik.paysplit.entity.Account
 import com.ebucelik.paysplit.exception.UsernameOrPasswordWrongException
 import com.ebucelik.paysplit.repository.AccountRepository
 import com.ebucelik.paysplit.service.AccountService
-import com.ebucelik.paysplit.service.BankDetailService
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -12,8 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AccountServiceImpl(
-    private val accountRepository: AccountRepository,
-    private val bankDetailService: BankDetailService
+    private val accountRepository: AccountRepository
 ) : AccountService, UserDetailsService {
 
     override fun login(username: String, password: String): Account? {
@@ -33,14 +31,6 @@ class AccountServiceImpl(
 
         if (foundAccount != null) {
             throw Exception("Username already exists.")
-        }
-
-        if (account.bankdetail != null) {
-            val foundBankDetail = account.bankdetail.let { bankDetail -> bankDetail?.let { bankDetailService.findByIban(it.iban) }}
-
-            if (foundBankDetail != null) {
-                throw Exception("Bank informations already exists.")
-            }
         }
 
         if (

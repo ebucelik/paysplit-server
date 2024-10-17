@@ -31,10 +31,6 @@ class Account {
     @Column
     var picturelink: String = ""
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "bankdetail", referencedColumnName = "id")
-    var bankdetail: BankDetail? = null
-
     fun comparePassword(password: String): Boolean {
         return BCryptPasswordEncoder().matches(password, this.password)
     }

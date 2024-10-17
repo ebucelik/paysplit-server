@@ -1,7 +1,6 @@
 package com.ebucelik.paysplit.config
 
 import com.ebucelik.paysplit.repository.AccountRepository
-import com.ebucelik.paysplit.service.BankDetailService
 import com.ebucelik.paysplit.serviceImplementation.AccountServiceImpl
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -20,12 +19,10 @@ class Configuration {
 
     @Bean
     fun accountService(
-        accountRepository: AccountRepository,
-        bankDetailService: BankDetailService
+        accountRepository: AccountRepository
     ): UserDetailsService {
         return AccountServiceImpl(
-            accountRepository,
-            bankDetailService
+            accountRepository
         )
     }
 
@@ -34,13 +31,12 @@ class Configuration {
 
     @Bean
     fun authenticationProvider(
-        accountRepository: AccountRepository,
-        bankDetailService: BankDetailService
+        accountRepository: AccountRepository
     ): AuthenticationProvider {
         return DaoAuthenticationProvider()
             .also {
                 it.setUserDetailsService(
-                    accountService(accountRepository, bankDetailService)
+                    accountService(accountRepository)
                 )
                 it.setPasswordEncoder(encoder())
             }
