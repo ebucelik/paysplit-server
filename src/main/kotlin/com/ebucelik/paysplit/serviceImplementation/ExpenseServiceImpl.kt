@@ -12,6 +12,10 @@ class ExpenseServiceImpl(private val expenseRepository: ExpenseRepository): Expe
     }
 
     override fun getExpensesByCreatorId(creatorId: Long): List<Expense> {
+        return expenseRepository.findExpensesByCreatorId(creatorId)
+    }
+
+    override fun getGroupedExpensesByCreatorId(creatorId: Long): List<Expense> {
         val expenses = expenseRepository.findExpensesByCreatorId(creatorId)
 
         val expensesSummedUp = expenses.stream().map { expense ->
@@ -20,7 +24,7 @@ class ExpenseServiceImpl(private val expenseRepository: ExpenseRepository): Expe
                     it.creatorId == expense.creatorId &&
                             it.expenseDescription == expense.expenseDescription &&
                             it.timestamp == expense.timestamp
-            }.sumOf { it.expenseAmount.trim().replace(",", ".").toDouble() }
+                }.sumOf { it.expenseAmount.trim().replace(",", ".").toDouble() }
 
             val newExpense = Expense()
             newExpense.id = expense.id

@@ -33,6 +33,21 @@ class ExpenseController(private val expenseService: ExpenseService) {
         }
     }
 
+    @GetMapping("/grouped")
+    fun getGroupedExpenses(@RequestParam id: Long): ResponseEntity<Any> {
+        return try {
+            ResponseEntity.ok(expenseService.getGroupedExpensesByCreatorId(id))
+        } catch (e: Exception) {
+            ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                    e.message?.let { message ->
+                        MessageResponseDto(message)
+                    }
+                )
+        }
+    }
+
     @GetMapping
     fun getExpenses(@RequestParam id: Long): ResponseEntity<Any> {
         return try {
