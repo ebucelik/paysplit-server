@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
 interface AccountRepository: JpaRepository<Account, Long> {
+    fun findAccountById(id: Long): Account?
 
     fun findAccountByUsername(username: String): Account?
 

@@ -3,6 +3,7 @@ package com.ebucelik.paysplit.controller
 import com.ebucelik.paysplit.dto.MessageResponseDto
 import com.ebucelik.paysplit.entity.Expense
 import com.ebucelik.paysplit.service.ExpenseService
+import com.google.gson.Gson
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -48,10 +49,23 @@ class ExpenseController(private val expenseService: ExpenseService) {
         }
     }
 
-    @GetMapping
-    fun getExpenses(@RequestParam id: Long): ResponseEntity<Any> {
+    @GetMapping("/details")
+    fun getExpenseDetails(
+        @RequestParam id: Long,
+        @RequestParam expenseDescription: String,
+        @RequestParam timestamp: Double
+    ): ResponseEntity<Any> {
         return try {
-            ResponseEntity.ok(expenseService.getExpensesByCreatorId(id))
+            ResponseEntity.ok(
+                Gson()
+                    .toJson(
+                        expenseService.getExpenseDetails(
+                            id,
+                            expenseDescription,
+                            timestamp
+                        )
+                    )
+            )
         } catch (e: Exception) {
             ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
